@@ -9,6 +9,9 @@ pydst
 .. image:: https://img.shields.io/travis/elben10/pydst.svg
         :target: https://travis-ci.org/elben10/pydst
 
+.. image:: https://ci.appveyor.com/api/projects/status/5mdehen3kov4f7tv/branch/master?svg=true
+        :target: https://ci.appveyor.com/project/elben10/pydst
+
 .. image:: https://readthedocs.org/projects/pydst/badge/?version=latest
         :target: https://pydst.readthedocs.io/en/latest/?badge=latest
         :alt: Documentation Status
