@@ -60,3 +60,44 @@ def test_list_multiple_elements_subject():
 def test_int_subject():
         with pytest.raises(ValueError):
             pydst.Dst().get_subjects(subjects=2)
+
+# Check that error is raised if lang == fi
+def test_lang_error_subject():
+        with pytest.raises(ValueError):
+            pydst.Dst().get_subjects(lang='fi')
+
+
+# Check that get_tables returns df when str is provided as subjects arg
+def test_str_tables():
+    assert isinstance(pydst.Dst().get_tables(subjects='02'), DataFrame)
+
+# Check that get_tables returns df when list is provided as subjects arg
+# Only one element is provided
+def test_list_single_element_tables():
+    assert isinstance(pydst.Dst().get_tables(subjects=['02']), DataFrame)
+
+# Check that get_tables returns df when list is provided as subjects arg
+# Multiple elements is provided
+def test_list_multiple_elements_tables():
+    assert isinstance(pydst.Dst().get_tables(subjects=['02', '05']), DataFrame)
+
+# Check that if get_tables get int as subjects arg it raises an ValueError
+def test_int_tables():
+        with pytest.raises(ValueError):
+            pydst.Dst().get_tables(subjects=2)
+
+# Check that ValueError is raised when dst_tables arg include_inactive is int
+def test_int_include_inactive_get_tables():
+            with pytest.raises(ValueError):
+                pydst.Dst().get_tables(inactive_tables=2)
+
+# Check that error is raised if lang == fi
+def test_lang_error_tables():
+        with pytest.raises(ValueError):
+            pydst.Dst().get_tables(lang='fi')
+
+def check_no_inactive_tables_if_false():
+    assert pydst.Dst().get_tables().active.all()
+
+def check_inactive_tables_if_true(inactive_tables=True):
+    assert pydst.Dst().get_tables().active.all() == False
