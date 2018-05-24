@@ -27,7 +27,7 @@ class Dst(object):
         This function allows to retrieve the subjects and subsubjects
         Statistics Denmark uses to categorize their tables. These subjectsID
         can be used to only retrieve the tables that is classified with
-        the respective SubjectsID using get_tables.
+        the respective SubjectsID using ``get_tables``.
 
         Args:
             subjects (str/list, optional): If a valid subjectsID is provided
@@ -41,6 +41,28 @@ class Dst(object):
 
         Returns:
             pandas.DataFrame: Returns a DataFrame with subjects.
+
+        Examples:
+            The example beneath shows how ``get_subjects`` is used.
+
+            >>> from pydst import Dst
+            >>> Dst().get_subjects()
+            https://api.statbank.dk/v1/subjects/?lang=en&format=JSON
+                active                                       desc  hasSubjects  id
+            0     True                   Population and elections         True  02
+            1     True                          Living conditions         True  05
+            2     True                    Education and knowledge         True  03
+            3     True                Culture and National Church         True  18
+            4     True                  Labour, income and wealth         True  04
+            5     True                     Prices and consumption         True  06
+            6     True  National accounts and government finances         True  14
+            7     True                    Money and credit market         True  16
+            8     True                           External economy         True  13
+            9     True                 Business sector in general         True  07
+            10    True                           Business sectors         True  11
+            11    True          Geography, environment and energy         True  01
+            12    True                                      Other         True  19
+
         """
         if not lang:
             lang = self.lang
@@ -56,7 +78,7 @@ class Dst(object):
             sub_url = base_url + "{}?lang={}&format=JSON".format(str_subjects, lang)
         else:
             raise ValueError('Subjects must be a list or a string of subject ids')
-        print(sub_url)
+
         r = requests.get(sub_url)
         bad_request_wrapper(r)
 
