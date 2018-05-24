@@ -105,7 +105,7 @@ class Dst(object):
 
             >>> from pydst import Dst
             >>> Dst().get_tables()
-                  active firstPeriod        id latestPeriod                                              text      unit
+                  active firstPeriod        id latestPeriod
             0       True      2008Q1    FOLK1A       2018Q2
             1       True      2008Q1    FOLK1B       2018Q2
             2       True      2008Q1    FOLK1C       2018Q2
@@ -131,7 +131,7 @@ class Dst(object):
             1960 2017-11-28 08:00:00     [balance items, county council district, time]
 
             [1961 rows x 8 columns]
-
+            
         """
 
         if not lang:
