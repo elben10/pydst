@@ -3,10 +3,12 @@
 """This module powers the DstSubjects class that is the workhorse to
 obtain subjects and subjects from Statistics Denmark.
 """
-from pandas import DataFrame, to_datetime
+from pandas import DataFrame, to_datetime, read_csv
 from pydst.utils import check_lang, bad_request_wrapper, desc_to_df
 import requests
-
+from collections import OrderedDict
+from io import StringIO
+import os
 
 class Dst(object):
     """Retrieve subjects, metadata and data from Statistics Denmark.
@@ -131,7 +133,7 @@ class Dst(object):
             1960 2017-11-28 08:00:00     [balance items, county council district, time]
 
             [1961 rows x 8 columns]
-            
+
         """
 
         if not lang:
@@ -162,3 +164,173 @@ class Dst(object):
         res = DataFrame(r.json())
         res['updated'] = to_datetime(res['updated'])
         return res
+
+    def get_variables(self, table_id, lang=None):
+        """ DataFrame with variables contained in `table_id`
+
+        Args:
+            table_id (str): Table ID for the the table you want to retrieve data
+            from.
+
+            lang (str, optional): If lang is provided it uses this argument
+                instead of the Dst's class attribute lang. Can take the values
+                ``en`` for English or ``da`` for Danish
+
+        Returns:
+            pandas.DataFrame: Returns a DataFrame with subjects.
+
+        Todo:
+            * Implement tests
+        """
+        if not lang:
+            lang = self.lang
+        else:
+            lang = check_lang(lang)
+
+        base_url = "http://api.statbank.dk/v1/tableinfo/{}?lang={}"\
+        .format(table_id, lang)
+
+        r = requests.get(base_url)
+        bad_request_wrapper(r)
+        return DataFrame(r.json()['variables'])
+
+    def get_metadata(self, table_id, lang=None):
+        """ DataFrame with metadata about `table_id`
+
+        Args:
+            table_id (str): Table ID for the the table you want to retrieve data
+            from.
+
+            lang (str, optional): If lang is provided it uses this argument
+                instead of the Dst's class attribute lang. Can take the values
+                ``en`` for English or ``da`` for Danish
+
+        Returns:
+            dict: Returns a dictionary containing metadata about the
+                specified data.
+
+        Todo:
+            * Implement tests
+        """
+        if not lang:
+            lang = self.lang
+        else:
+            lang = check_lang(lang)
+
+        base_url = "http://api.statbank.dk/v1/tableinfo/{}?lang={}"\
+        .format(table_id, lang)
+
+        r = requests.get(base_url)
+        bad_request_wrapper(r)
+        json = r.json()
+        json.pop('variables', None)
+        return json
+
+    def get_data(self, table_id, variables=None, lang=None):
+        """ DataFrame with variables contained in `table_id`
+
+        Args:
+            table_id (str): Table ID for the the table you want to retrieve data
+                from.
+
+            lang (str, optional): If lang is provided it uses this argument
+                instead of the Dst's class attribute lang. Can take the values
+                ``en`` for English or ``da`` for Danish
+
+            variables(dict, optional):
+
+        Returns:
+            pandas.DataFrame: Returns a DataFrame with data from table_id.
+
+        Todo:
+            *
+                Implement tests
+            *
+                Ensure that variables (dict) can only take lists as inputs
+                that is entirely filled with strings
+            *
+                Ensure that variables (dict) can take string as values
+        """
+        if not lang:
+            lang = self.lang
+        else:
+            lang = check_lang(lang)
+
+        vars = self.get_variables(table_id, lang).iterrows()
+
+        if isinstance(variables, type(None)):
+            args = {row[1]['id']:[row[1]['values'][0]['id']] for row in vars}
+        elif isinstance(variables, dict):
+            args = {row[1]['id']:[row[1]['values'][0]['id']] for row \
+                    in vars if row[1]['id'] not in variables.keys()}
+            args = {**variables, **args}
+        else:
+            raise ValueError("Variables must be either type None or Dict")
+
+        base_url = 'http://api.statbank.dk/v1/data/{}/' \
+                    'BULK?lang={}&delimiter=Semicolon&{}'
+        arg_str = '&'.join([key + '=' + ','.join(value) \
+                            for key, value in args.items()])
+        url = base_url.format(table_id, lang, arg_str)
+        r = requests.get(url)
+        bad_request_wrapper(r)
+        return read_csv(StringIO(r.content.decode('utf-8')), sep=';')
+
+    def get_csv(self, path, table_id, variables=None, lang=None):
+        """ DataFrame with variables contained in `table_id`
+
+        Args:
+            path (str): Outputdirectory
+
+            table_id (str): Table ID for the the table you want to retrieve data
+                from.
+
+            lang (str, optional): If lang is provided it uses this argument
+                instead of the Dst's class attribute lang. Can take the values
+                ``en`` for English or ``da`` for Danish
+
+            variables(dict, optional):
+
+        Returns:
+            None: Doesn't return anything.
+
+        Todo:
+            *
+                Implement tests
+            *
+                Ensure that variables (dict) can only take lists as inputs
+                that is entirely filled with strings
+            *
+                Ensure that variables (dict) can take string as values
+        """
+        if not lang:
+            lang = self.lang
+        else:
+            lang = check_lang(lang)
+
+        if not os.path.exists(os.path.dirname(\
+        os.path.abspath(os.path.expanduser(path)))):
+            raise OSError('Directory does not exist')
+
+        vars = self.get_variables(table_id, lang).iterrows()
+
+        if isinstance(variables, type(None)):
+            args = {row[1]['id']:[row[1]['values'][0]['id']] for row in vars}
+        elif isinstance(variables, dict):
+            args = {row[1]['id']:[row[1]['values'][0]['id']] for row \
+                    in vars if row[1]['id'] not in variables.keys()}
+            args = {**variables, **args}
+        else:
+            raise ValueError("Variables must be either type None or Dict")
+
+        base_url = 'http://api.statbank.dk/v1/data/{}/' \
+                    'BULK?lang={}&delimiter=Semicolon&{}'
+        arg_str = '&'.join([key + '=' + ','.join(value) \
+                            for key, value in args.items()])
+        url = base_url.format(table_id, lang, arg_str)
+        r = requests.get(url, stream=True)
+        bad_request_wrapper(r)
+        with open(os.path.abspath(os.path.expanduser(path)), 'wb') as f:
+            for line in r.iter_lines():
+                f.write(line)
+                f.write('\n'.encode())
