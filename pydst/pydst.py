@@ -277,7 +277,7 @@ class Dst(object):
         return read_csv(StringIO(r.content.decode('utf-8')), sep=';')
 
     def get_csv(self, path, table_id, variables=None, lang=None):
-        """ DataFrame with variables contained in `table_id`
+        """ Save `table_id` as csv
 
         Args:
             path (str): Outputdirectory

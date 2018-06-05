@@ -4,16 +4,16 @@ pydst package
 Submodules
 ----------
 
-pydst\.pydst module
--------------------
+pydst.pydst module
+------------------
 
 .. automodule:: pydst.pydst
     :members:
     :undoc-members:
     :show-inheritance:
 
-pydst\.utils module
--------------------
+pydst.utils module
+------------------
 
 .. automodule:: pydst.utils
     :members:
