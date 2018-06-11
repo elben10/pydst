@@ -99,5 +99,5 @@ def test_lang_error_tables():
 def check_no_inactive_tables_if_false():
     assert pydst.Dst().get_tables().active.all()
 
-def check_inactive_tables_if_true(inactive_tables=True):
-    assert pydst.Dst().get_tables().active.all() == False
+def check_inactive_tables_if_true():
+    assert pydst.Dst().get_tables(inactive_tables=True).active.all() == False
