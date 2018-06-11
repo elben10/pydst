@@ -21,6 +21,9 @@ pydst
      :target: https://pyup.io/repos/github/elben10/pydst/
      :alt: Updates
 
+.. image:: https://codecov.io/gh/elben10/pydst/branch/master/graph/badge.svg
+     :target: https://codecov.io/gh/elben10/pydst
+
 
 
 Provides a simple API for retrieving data from Statistics Denmark
