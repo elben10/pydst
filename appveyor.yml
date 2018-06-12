@@ -2,14 +2,15 @@ build: false  # Not a C# project
 environment:
   matrix:
     - TOXENV: py35
+      TOXPYTHON: C:\Python35\python.exe
+      PYTHON_HOME: C:\Python35
+      PYTHON_VERSION: '3.5'
     - TOXENV: py36
 
 matrix:
   fast_finish: true
 
 install:
-  - "SET PATH=%PYTHON%;%PYTHON%\\Scripts;%PATH%"
-  - python --version
   - C:\Python36\python -m pip install --pre -U tox
   - C:\Python36\python -m pip install -rrequirements_dev.txt
 
