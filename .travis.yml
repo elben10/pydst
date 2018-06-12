@@ -18,8 +18,7 @@ script:
 
 # Codecov.io
 after_success:
-  - coverage run --source pydst -m pytest
-  - bash <(curl -s https://codecov.io/bash)
+  - codecov
 # Assuming you have installed the travis-ci CLI tool, after you
 # create the Github repo and add it to Travis, run the
 # following command to finish PyPI deployment setup:
