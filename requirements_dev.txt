@@ -11,3 +11,4 @@ pandas==0.23.0
 pytest==3.6.1
 pytest-runner==4.2
 Cerberus==1.2
+codecov==2.0.15 
