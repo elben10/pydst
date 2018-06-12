@@ -9,3 +9,4 @@ matrix:
 
 install:
 - C:\Python36\python -m pip install --pre -U tox
+- C:\Python36\python -m pip install -rrequirements_dev.txt
