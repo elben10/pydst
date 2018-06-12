@@ -10,5 +10,6 @@ twine==1.11.0
 pandas==0.23.0
 pytest==3.6.1
 pytest-runner==4.2
+pytest-cov==2.5.1
 cerberus==1.2
 codecov==2.0.15
