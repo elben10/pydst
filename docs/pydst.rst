@@ -20,6 +20,14 @@ pydst.utils module
     :undoc-members:
     :show-inheritance:
 
+pydst.validators module
+-----------------------
+
+.. automodule:: pydst.validators
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 
 Module contents
 ---------------

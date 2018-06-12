@@ -3,11 +3,8 @@ pydst
 =====
 
 
-.. image:: https://img.shields.io/pypi/v/pydst.svg
-        :target: https://pypi.python.org/pypi/pydst
-
-.. image:: https://img.shields.io/travis/elben10/pydst.svg
-        :target: https://travis-ci.org/elben10/pydst
+.. image:: https://travis-ci.org/elben10/pydst.svg?branch=master
+    :target: https://travis-ci.org/elben10/pydst
 
 .. image:: https://ci.appveyor.com/api/projects/status/5mdehen3kov4f7tv/branch/master?svg=true
         :target: https://ci.appveyor.com/project/elben10/pydst
