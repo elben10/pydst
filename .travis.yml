@@ -1,35 +1,40 @@
-# Config file for automatic testing at travis-ci.org
-
+sudo: false
 language: python
+cache: pip
 python:
-  - 3.6
   - 3.5
+  - 3.6
+  # - 3.7-dev
+  # - nightly
+  # - pypy
+env:
+  TOXENV=py
 
-# Command to install dependencies, e.g. pip install -r requirements.txt --use-mirrors
+matrix:
+  fast_finish: true
+  allow_failures:
+  - os:  osx
+  # - python: 3.7-dev
+  # - python: nightly
+  # - python: pypy
+  include:
+    - python: 3.6
+      env: TOXENV=docs
+    - python: 3.6
+      env: TOXENV=fix-lint
+    - os: osx
+      language: generic
+
+before_install:
+ - pyenv versions
+ - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then source .travis-osx; fi
+
 install:
-  - pip install -U tox-travis
-  - pip install -r requirements_dev.txt
+  - pip install -U six
+  - pip install --pre -U tox
 
-# Command to run tests, e.g. python setup.py test
 script:
   - tox
-  - coverage run --source pydst -m pytest
 
-
-# Codecov.io
 after_success:
-  - codecov
-# Assuming you have installed the travis-ci CLI tool, after you
-# create the Github repo and add it to Travis, run the
-# following command to finish PyPI deployment setup:
-# $ travis encrypt --add deploy.password
-# deploy:
-#   provider: pypi
-#   distributions: sdist bdist_wheel
-#   user: elben10
-#   password:
-#     secure: PLEASE_REPLACE_ME
-#   on:
-#     tags: true
-#     repo: elben10/pydst
-#     python: 3.6
+- if [[ $TOXENV == "py" ]]; then tox -e coverage,codecov; fi

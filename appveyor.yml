@@ -9,7 +9,13 @@ matrix:
 
 install:
   - C:\Python36\python -m pip install --pre -U tox
-  - C:\Python36\python -m pip install -rrequirements_dev.txt
 
 test_script:
   - C:\Python36\scripts\tox
+
+after_test:
+  - C:\Python36\scripts\tox -e coverage,codecov
+
+cache:
+  - '%LOCALAPPDATA%\pip\cache'
+  - '%USERPROFILE%\.cache\pre-commit'
