@@ -7,7 +7,7 @@ import pytest
 
 from pandas import DataFrame
 from pydst import pydst
-import pydst.utils as utils
+from pydst import utils
 
 # Check that utils.check_lang raises a value error if not 'da' or 'en'
 def test_nonexistence_lang_error():
@@ -96,8 +96,8 @@ def test_lang_error_tables():
         with pytest.raises(ValueError):
             pydst.Dst().get_tables(lang='fi')
 
-def check_no_inactive_tables_if_false():
+def test_no_inactive_tables_if_false():
     assert pydst.Dst().get_tables().active.all()
 
-def check_inactive_tables_if_true():
+def test_inactive_tables_if_true():
     assert pydst.Dst().get_tables(inactive_tables=True).active.all() == False
