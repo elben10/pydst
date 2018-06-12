@@ -8,8 +8,7 @@ matrix:
   fast_finish: true
 
 install:
-  - C:\Python36\python -m pip install --pre -U tox
-  - C:\Python36\python -m pip install -r requirements_dev.txt
+  - "SET PATH=%PYTHON%;%PYTHON%\\Scripts;%PATH%"
 
 test_script:
   - C:\Python36\scripts\tox
