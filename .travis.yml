@@ -8,14 +8,13 @@ python:
 # Command to install dependencies, e.g. pip install -r requirements.txt --use-mirrors
 install:
   - pip install -U tox-travis
-  - pip install codecov
 
 # Command to run tests, e.g. python setup.py test
 script: tox
 
 # Codecov.io
 after_success:
-- codecov
+  - bash <(curl -s https://codecov.io/bash)
 # Assuming you have installed the travis-ci CLI tool, after you
 # create the Github repo and add it to Travis, run the
 # following command to finish PyPI deployment setup:
