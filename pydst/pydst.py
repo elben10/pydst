@@ -4,7 +4,7 @@
 obtain subjects and subjects from Statistics Denmark.
 """
 from pandas import DataFrame, to_datetime, read_csv
-from pydst.utils import check_lang, bad_request_wrapper, desc_to_df
+from pydst.utils import check_lang, bad_request_wrapper, desc_to_df, assign_lang
 import requests
 from collections import OrderedDict
 from io import StringIO
@@ -62,10 +62,7 @@ class Dst(object):
             [13 rows x 4 columns]
 
         """
-        if not lang:
-            lang = self.lang
-        else:
-            lang = check_lang(lang)
+        lang = assign_lang(self, lang)
 
         base_url = "https://api.statbank.dk/v1/subjects/"
 
@@ -135,11 +132,7 @@ class Dst(object):
             [1961 rows x 8 columns]
 
         """
-
-        if not lang:
-            lang = self.lang
-        else:
-            lang = check_lang(lang)
+        lang = assign_lang(self, lang)
 
         base_url = "http://api.statbank.dk/v1/tables"
 
@@ -182,10 +175,7 @@ class Dst(object):
         Todo:
             * Implement tests
         """
-        if not lang:
-            lang = self.lang
-        else:
-            lang = check_lang(lang)
+        lang = assign_lang(self, lang)
 
         base_url = "http://api.statbank.dk/v1/tableinfo/{}?lang={}"\
         .format(table_id, lang)
@@ -212,10 +202,7 @@ class Dst(object):
         Todo:
             * Implement tests
         """
-        if not lang:
-            lang = self.lang
-        else:
-            lang = check_lang(lang)
+        lang = assign_lang(self, lang)
 
         base_url = "http://api.statbank.dk/v1/tableinfo/{}?lang={}"\
         .format(table_id, lang)
@@ -251,10 +238,7 @@ class Dst(object):
             *
                 Ensure that variables (dict) can take string as values
         """
-        if not lang:
-            lang = self.lang
-        else:
-            lang = check_lang(lang)
+        lang = assign_lang(self, lang)
 
         vars = self.get_variables(table_id, lang).iterrows()
 
@@ -303,10 +287,7 @@ class Dst(object):
             *
                 Ensure that variables (dict) can take string as values
         """
-        if not lang:
-            lang = self.lang
-        else:
-            lang = check_lang(lang)
+        lang = assign_lang(self, lang)
 
         if not os.path.exists(os.path.dirname(\
         os.path.abspath(os.path.expanduser(path)))):

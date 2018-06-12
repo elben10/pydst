@@ -1,4 +1,5 @@
 from pandas import DataFrame
+from pydst import validators
 
 def bad_request_wrapper(r):
     """Raises an error if http error
@@ -25,9 +26,14 @@ def check_lang(lang):
         lang (str): Can take the values ``en`` for English or ``da``
             for Danish
     """
-    if lang not in ['da', 'en']:
-        raise ValueError('lang is not specified correct. See the docs.')
+    validators.lang_validator(lang, ['da', 'en'])
     return lang
+
+def assign_lang(self, lang=None):
+    if lang:
+        return check_lang(lang)
+    else:
+        return check_lang(self.lang)
 
 def desc_to_df(list_):
     """Flattens subject response from Statistics Denmark
