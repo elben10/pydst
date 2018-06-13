@@ -114,5 +114,5 @@ def test_correct_url():
                            'v1',
                            'subjects',
                            '',
-                           {'format': 'JSON',
-                            'lang': 'en'})
+                           OrderedDict(sorted({'format': 'JSON',
+                            'lang': 'en'}.items(), key=lambda t: t[0])))
