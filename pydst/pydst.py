@@ -77,11 +77,12 @@ class Dst(object):
             'format': 'JSON'
             }
 
-        url = utils.construct_url(self.base_url, 
+        url = utils.construct_url(self.base_url,
                                   self.version,
                                   'subjects',
                                   '',
                                   query_dict)
+        print(url)
 
         r = requests.get(url)
         utils.bad_request_wrapper(r)
