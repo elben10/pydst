@@ -106,6 +106,9 @@ class Dst(object):
         Returns:
             pandas.DataFrame: Returns a DataFrame with subjects.
 
+        Todo:
+            * Check inactive_tables (cerberus validator)
+
         Examples:
             The example beneath shows how ``get_tables`` is used.
 
@@ -140,25 +143,29 @@ class Dst(object):
 
         """
         lang = utils.assign_lang(self, lang)
-
-        base_url = "http://api.statbank.dk/v1/tables"
-
-        if not subjects:
-            tab_url = base_url + "?lang={}".format(lang)
-        elif isinstance(subjects, str):
-            tab_url = base_url + "?lang={}&subjects={}".format(lang, subjects)
-        elif isinstance(subjects, list):
-            sub_str = ",".join(subjects)
-            tab_url = base_url + "?lang={}&subjects={}".format(lang, sub_str)
-        else:
+        if not isinstance(subjects, (str, list, type(None))):
             raise ValueError('Subjects must be a list or a string of subject ids')
 
-        if inactive_tables == True:
-            tab_url += "&includeInactive=true"
-        elif not isinstance(inactive_tables, bool):
-            raise ValueError("include_inactive must be bool")
+        if isinstance(subjects, (str, list)):
+            validators.subject_validator(subjects)
 
-        r = requests.get(tab_url)
+        if not isinstance(inactive_tables, bool):
+            raise ValueError('Must be boolean') # replace with cerberus validator
+
+
+        query_dict = {
+            'lang': lang,
+            'format': 'JSON',
+            'includeInactive': 'true' if inactive_tables else None
+            }
+
+        url = utils.construct_url(self.base_url,
+                                  self.version,
+                                  'tables',
+                                  '',
+                                  query_dict)
+
+        r = requests.get(url)
         utils.bad_request_wrapper(r)
 
         res = DataFrame(r.json())
@@ -181,13 +188,22 @@ class Dst(object):
 
         Todo:
             * Implement tests
+            * TableID cerberus validator
         """
         lang = utils.assign_lang(self, lang)
 
-        base_url = "http://api.statbank.dk/v1/tableinfo/{}?lang={}"\
-        .format(table_id, lang)
+        query_dict = {
+            'lang': lang,
+            'format': 'JSON'
+            }
 
-        r = requests.get(base_url)
+        url = utils.construct_url(self.base_url,
+                                  self.version,
+                                  'tableinfo',
+                                  table_id,
+                                  query_dict)
+
+        r = requests.get(url)
         utils.bad_request_wrapper(r)
         return DataFrame(r.json()['variables'])
 
@@ -211,10 +227,18 @@ class Dst(object):
         """
         lang = utils.assign_lang(self, lang)
 
-        base_url = "http://api.statbank.dk/v1/tableinfo/{}?lang={}"\
-        .format(table_id, lang)
+        query_dict = {
+            'lang': lang,
+            'format': 'JSON'
+            }
 
-        r = requests.get(base_url)
+        url = utils.construct_url(self.base_url,
+                                  self.version,
+                                  'tableinfo',
+                                  table_id,
+                                  query_dict)
+
+        r = requests.get(url)
         utils.bad_request_wrapper(r)
         json = r.json()
         json.pop('variables', None)
