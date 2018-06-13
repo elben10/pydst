@@ -82,7 +82,6 @@ class Dst(object):
                                   'subjects',
                                   '',
                                   query_dict)
-        print(url)
 
         r = requests.get(url)
         utils.bad_request_wrapper(r)
