@@ -116,4 +116,3 @@ def test_correct_url():
                            '',
                            {'format': 'JSON',
                             'lang': 'en'})
-test_correct_url()
