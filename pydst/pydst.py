@@ -4,7 +4,7 @@
 obtain subjects and subjects from Statistics Denmark.
 """
 from pandas import DataFrame, to_datetime, read_csv
-from pydst.utils import check_lang, bad_request_wrapper, desc_to_df, assign_lang
+from pydst import utils
 import requests
 from collections import OrderedDict
 from io import StringIO
@@ -22,10 +22,10 @@ class Dst(object):
     """
 
     def __init__(self, lang='en'):
-        self.lang = check_lang(lang)
+        self.lang = utils.check_lang(lang)
 
     def get_subjects(self, subjects=None, lang=None):
-        """Retrieve subjects and subjects from Statistics Denmark
+        """Retrieve subjects and sub subjects from Statistics Denmark.
 
         This function allows to retrieve the subjects and subsubjects
         Statistics Denmark uses to categorize their tables. These subjectsID
@@ -62,7 +62,7 @@ class Dst(object):
             [13 rows x 4 columns]
 
         """
-        lang = assign_lang(self, lang)
+        lang = utils.assign_lang(self, lang)
 
         base_url = "https://api.statbank.dk/v1/subjects/"
 
@@ -77,9 +77,9 @@ class Dst(object):
             raise ValueError('Subjects must be a list or a string of subject ids')
 
         r = requests.get(sub_url)
-        bad_request_wrapper(r)
+        utils.bad_request_wrapper(r)
 
-        return desc_to_df(r.json())
+        return utils.desc_to_df(r.json())
 
     def get_tables(self, subjects=None, inactive_tables=False, lang=None):
         """
@@ -132,7 +132,7 @@ class Dst(object):
             [1961 rows x 8 columns]
 
         """
-        lang = assign_lang(self, lang)
+        lang = utils.assign_lang(self, lang)
 
         base_url = "http://api.statbank.dk/v1/tables"
 
@@ -152,7 +152,7 @@ class Dst(object):
             raise ValueError("include_inactive must be bool")
 
         r = requests.get(tab_url)
-        bad_request_wrapper(r)
+        utils.bad_request_wrapper(r)
 
         res = DataFrame(r.json())
         res['updated'] = to_datetime(res['updated'])
@@ -175,13 +175,13 @@ class Dst(object):
         Todo:
             * Implement tests
         """
-        lang = assign_lang(self, lang)
+        lang = utils.assign_lang(self, lang)
 
         base_url = "http://api.statbank.dk/v1/tableinfo/{}?lang={}"\
         .format(table_id, lang)
 
         r = requests.get(base_url)
-        bad_request_wrapper(r)
+        utils.bad_request_wrapper(r)
         return DataFrame(r.json()['variables'])
 
     def get_metadata(self, table_id, lang=None):
@@ -202,13 +202,13 @@ class Dst(object):
         Todo:
             * Implement tests
         """
-        lang = assign_lang(self, lang)
+        lang = utils.assign_lang(self, lang)
 
         base_url = "http://api.statbank.dk/v1/tableinfo/{}?lang={}"\
         .format(table_id, lang)
 
         r = requests.get(base_url)
-        bad_request_wrapper(r)
+        utils.bad_request_wrapper(r)
         json = r.json()
         json.pop('variables', None)
         return json
@@ -238,7 +238,7 @@ class Dst(object):
             *
                 Ensure that variables (dict) can take string as values
         """
-        lang = assign_lang(self, lang)
+        lang = utils.assign_lang(self, lang)
 
         vars = self.get_variables(table_id, lang).iterrows()
 
@@ -257,7 +257,7 @@ class Dst(object):
                             for key, value in args.items()])
         url = base_url.format(table_id, lang, arg_str)
         r = requests.get(url)
-        bad_request_wrapper(r)
+        utils.bad_request_wrapper(r)
         return read_csv(StringIO(r.content.decode('utf-8')), sep=';')
 
     def get_csv(self, path, table_id, variables=None, lang=None):
@@ -287,7 +287,7 @@ class Dst(object):
             *
                 Ensure that variables (dict) can take string as values
         """
-        lang = assign_lang(self, lang)
+        lang = utils.assign_lang(self, lang)
 
         if not os.path.exists(os.path.dirname(\
         os.path.abspath(os.path.expanduser(path)))):
@@ -310,7 +310,7 @@ class Dst(object):
                             for key, value in args.items()])
         url = base_url.format(table_id, lang, arg_str)
         r = requests.get(url, stream=True)
-        bad_request_wrapper(r)
+        utils.bad_request_wrapper(r)
         with open(os.path.abspath(os.path.expanduser(path)), 'wb') as f:
             for line in r.iter_lines():
                 f.write(line)
