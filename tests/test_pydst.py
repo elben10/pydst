@@ -8,6 +8,7 @@ import pytest
 from pandas import DataFrame
 from pydst import pydst
 from pydst import utils
+from collections import OrderedDict
 
 # Check that utils.check_lang raises a value error if not 'da' or 'en'
 def test_nonexistence_lang_error():
