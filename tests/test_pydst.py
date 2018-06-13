@@ -101,3 +101,12 @@ def test_no_inactive_tables_if_false():
 
 def test_inactive_tables_if_true():
     assert pydst.Dst().get_tables(inactive_tables=True).active.all() == False
+
+def test_correct_url():
+    assert 'https://api.statbank.dk/v1/subjects?format=JSON&lang=en' \
+    == utils.construct_url('https://api.statbank.dk',
+                           'v1',
+                           'subjects',
+                           '',
+                           {'format': 'JSON',
+                            'lang': 'en'})
