@@ -56,6 +56,10 @@ def desc_to_df(list_):
     return DataFrame(json_to_df_dict(list_))
 
 def construct_url(base, version, app, path, query):
+    """
+    Todo:
+        * Test that url result expected url
+    """
     url_without_query = ''.join([os.path.join(i, '') for i in \
                                 [base, version, app, path]])
     query = flatten_list_to_string_in_dict_remove_none(query)
