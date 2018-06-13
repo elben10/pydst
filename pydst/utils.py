@@ -1,5 +1,6 @@
 from pandas import DataFrame
 from pydst import validators
+import os
 
 def bad_request_wrapper(r):
     """Raises an error if http error
@@ -53,3 +54,14 @@ def desc_to_df(list_):
                 res.extend(json_to_df_dict(i['subjects']))
         return res
     return DataFrame(json_to_df_dict(list_))
+
+def construct_url(base, version, app, path, query):
+    url_without_query = ''.join([os.path.join(i, '') for i in \
+                                [base, version, app, path]])
+    query = flatten_list_to_string_in_dict_remove_none(query)
+    query_str = '&'.join(['{}={}'.format(k, v) for k, v in query.items()])
+    return url_without_query.strip('/') + '?' + query_str
+
+def flatten_list_to_string_in_dict_remove_none(dict):
+    return {k: (v if isinstance(v, str) else ','.join(v)) for k,v \
+                in dict.items() if v is not None}

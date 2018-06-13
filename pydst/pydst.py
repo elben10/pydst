@@ -5,6 +5,7 @@ obtain subjects and subjects from Statistics Denmark.
 """
 from pandas import DataFrame, to_datetime, read_csv
 from pydst import utils
+from pydst import validators
 import requests
 from collections import OrderedDict
 from io import StringIO
@@ -23,6 +24,8 @@ class Dst(object):
 
     def __init__(self, lang='en'):
         self.lang = utils.check_lang(lang)
+        self.base_url = 'https://api.statbank.dk'
+        self.version = 'v1'
 
     def get_subjects(self, subjects=None, lang=None):
         """Retrieve subjects and sub subjects from Statistics Denmark.
@@ -63,20 +66,24 @@ class Dst(object):
 
         """
         lang = utils.assign_lang(self, lang)
-
-        base_url = "https://api.statbank.dk/v1/subjects/"
-
-        if not subjects:
-            sub_url = base_url + "?lang={}&format=JSON".format(lang)
-        elif isinstance(subjects, str):
-            sub_url = base_url + "{}?lang={}&format=JSON".format(subjects, lang)
-        elif isinstance(subjects, list):
-            str_subjects = ','.join(subjects)
-            sub_url = base_url + "{}?lang={}&format=JSON".format(str_subjects, lang)
-        else:
+        if not isinstance(subjects, (str, list, type(None))):
             raise ValueError('Subjects must be a list or a string of subject ids')
 
-        r = requests.get(sub_url)
+        if isinstance(subjects, (str, list)):
+            validators.subject_validator(subjects)
+
+        query_dict = {
+            'lang': lang,
+            'format': 'JSON'
+            }
+
+        url = utils.construct_url(self.base_url, 
+                                  self.version,
+                                  'subjects',
+                                  '',
+                                  query_dict)
+
+        r = requests.get(url)
         utils.bad_request_wrapper(r)
 
         return utils.desc_to_df(r.json())

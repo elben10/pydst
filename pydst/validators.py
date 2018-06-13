@@ -37,11 +37,7 @@ def lang_validator(lang, valid_langs):
 
     v.validate(validation_object, schema)
 
-    if any(v.errors):
-        raise ValueError(
-            'The following arguments is not provided correctly: {}. '\
-            'See the docs.'.format(dict_keys_to_comma_str(v.errors))
-            )
+    validation_error_raise(v)
 
     if not str_in_list(lang, valid_langs):
         raise ValueError('{} is not in {}'.format(lang, valid_langs))
@@ -56,7 +52,7 @@ def str_in_list(str, list):
         list (list of str): Arbitrary list of strings
 
     Returns:
-        bool: Returns True (False) if (not) str contained in list 
+        bool: Returns True (False) if (not) str contained in list
     """
     if str in list:
         return True
@@ -73,3 +69,37 @@ def dict_keys_to_comma_str(dict):
         str: Comma seperated string of keys.
     """
     return ', '.join([str(i) for i in dict.keys()])
+
+def validation_error_raise(validationObject):
+    if any(validationObject.errors):
+        raise ValueError(
+            'The following arguments is not provided correctly: {}. '\
+            'See the docs.'.format(dict_keys_to_comma_str(validationObject.errors))
+            )
+
+def subject_validator(subjects):
+    v = cerberus.Validator()
+    schema = {
+        'subjects': {
+            'anyof': [{
+                'type': 'string',
+                'regex': r'[0-9]+',
+            },
+            {
+                'type': 'list',
+                'schema': {
+                    'type': 'string',
+                    'regex': r'[0-9]+',
+                }
+            }
+
+            ]
+        }
+    }
+
+    validation_object = {
+        'subjects': subjects
+    }
+
+    v.validate(validation_object, schema)
+    validation_error_raise(v)
