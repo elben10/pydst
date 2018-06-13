@@ -60,7 +60,7 @@ def construct_url(base, version, app, path, query):
                                 [base, version, app, path]])
     query = flatten_list_to_string_in_dict_remove_none(query)
     query_str = '&'.join(['{}={}'.format(k, v) for k, v in query.items()])
-    return url_without_query.strip('/').strip('\\') + '?' + query_str
+    return url_without_query.replace("\\", "/").strip('/') + '?' + query_str
 
 def flatten_list_to_string_in_dict_remove_none(dict):
     return {k: (v if isinstance(v, str) else ','.join(v)) for k,v \
