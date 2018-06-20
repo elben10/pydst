@@ -7,7 +7,7 @@ tox==3.0.0
 Sphinx==1.7.5
 twine==1.11.0
 pandas==0.23.1
-pytest==3.6.1
+pytest==3.6.2
 pytest-runner==4.2
 pytest-cov==2.5.1
 cerberus==1.2
