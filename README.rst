@@ -6,7 +6,7 @@ pydst
 .. image:: https://travis-ci.org/elben10/pydst.svg?branch=master
     :target: https://travis-ci.org/elben10/pydst
 
-.. image:: https://ci.appveyor.com/api/projects/status/5mdehen3kov4f7tv/branch/master?svg=true
+.. image:: https://ci.appveyor.com/api/projects/status/eitne6qr2q31q9m7/branch/master?svg=true
         :target: https://ci.appveyor.com/project/elben10/pydst
 
 .. image:: https://readthedocs.org/projects/pydst/badge/?version=latest
