@@ -11,12 +11,26 @@ with open('README.rst') as readme_file:
 with open('HISTORY.rst') as history_file:
     history = history_file.read()
 
-with open('requirements.txt') as f:
-    requirements = f.read().split('\n')
+requirements = [
+    "pandas==0.23.4",
+    "cerberus==1.2",
+    "requests==2.21.0",
+]
 
-setup_requirements = ['pytest-runner', ]
-
-test_requirements = ['pytest', ]
+setup_requirements = [
+    "pip==10.0.1",
+    "bumpversion==0.5.3",
+    "wheel==0.31.1",
+    "watchdog==0.8.3",
+    "flake8==3.5.0",
+    "tox==3.0.0",
+    "Sphinx==1.7.5",
+    "twine==1.11.0",
+    "pytest==3.6.2",
+    "pytest-runner==4.2",
+    "pytest-cov==2.5.1",
+    "codecov==2.0.15",
+]
 
 setup(
     author="Jakob Jul Elben, Kristian Urup Larsen",
@@ -43,7 +57,6 @@ setup(
     packages=find_packages(include=['pydst']),
     setup_requires=setup_requirements,
     test_suite='tests',
-    tests_require=test_requirements,
     url='https://github.com/elben10/pydst',
     version='0.1.0.9000',
     zip_safe=False,
