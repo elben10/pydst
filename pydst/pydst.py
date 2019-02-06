@@ -77,10 +77,15 @@ class Dst(object):
             'format': 'JSON'
             }
 
+        if isinstance(subjects, list):
+            str_subjects = ','.join(subjects)
+        else:
+            str_subjects = subjects
+
         url = utils.construct_url(self.base_url,
                                   self.version,
                                   'subjects',
-                                  '',
+                                  str_subjects or '',
                                   query_dict)
 
         r = requests.get(url)
