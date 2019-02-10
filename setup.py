@@ -15,9 +15,6 @@ requirements = [
     "pandas==0.23.4",
     "cerberus==1.2",
     "requests==2.21.0",
-]
-
-setup_requirements = [
     "pip==10.0.1",
     "bumpversion==0.5.3",
     "wheel==0.31.1",
@@ -56,7 +53,6 @@ setup(
     keywords='pydst',
     name='pydst',
     packages=find_packages(include=['pydst']),
-    setup_requires=setup_requirements,
     test_suite='tests',
     url='https://github.com/elben10/pydst',
     version='0.1.0.9000',

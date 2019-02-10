@@ -1,6 +1,7 @@
-build:
-  image: latest
-
 python:
-  version: 3.6
-  setup_py_install: true
+   version: 3.7
+   install:
+      - requirements: requirements_dev.txt
+      - method: pip
+        path: .
+   system_packages: true
