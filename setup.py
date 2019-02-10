@@ -11,24 +11,8 @@ with open('README.rst') as readme_file:
 with open('HISTORY.rst') as history_file:
     history = history_file.read()
 
-requirements = [
-    "pandas==0.23.4",
-    "cerberus==1.2",
-    "requests==2.21.0",
-    "pip==10.0.1",
-    "bumpversion==0.5.3",
-    "wheel==0.31.1",
-    "watchdog==0.8.3",
-    "flake8==3.5.0",
-    "tox==3.0.0",
-    "Sphinx==1.7.5",
-    "twine==1.11.0",
-    "pytest==3.6.2",
-    "pytest-runner==4.2",
-    "pytest-cov==2.5.1",
-    "codecov==2.0.15",
-    "pluggy==0.6.0",
-]
+with open('requirements.txt') as req:
+    requirements = req.read().split('\n')
 
 setup(
     author="Jakob Jul Elben, Kristian Urup Larsen",
