@@ -1,34 +1,63 @@
-sudo: false
 language: python
-cache: pip
-python:
-  - 3.5
-  - 3.6
+
 env:
-  TOXENV=py
-
+  global:
+    - PYTHON36="3.6.8"
+    - PYTHON37="3.7.2"
+    - PYTHON38="3.8-dev"
 matrix:
-  fast_finish: true
-  allow_failures:
-  - os:  osx
   include:
-    - python: 3.6
-      env: TOXENV=docs
-    - python: 3.6
-      env: TOXENV=fix-lint
-    - os: osx
-      language: generic
+    - name: "Linux: Python3.6"
+      python: 3.6
+      
+    - name: "Linux: Python3.7"
+      python: 3.7
+      dist: xenial
+      sudo: true
+      
+    - name: "Linux: Python3.8-dev"
+      python: 3.8-dev
+      dist: xenial
+      sudo: true
+      
+    - name: "OSX: Python3.6"
+      os: osx
+      language: sh
+      env: PYTHON_VERSION=${PYTHON36}
+      before_install: 
+        - source scripts/osx.sh
+        
+    - name: "OSX: Python3.7"
+      os: osx
+      language: sh
+      env: PYTHON_VERSION=${PYTHON37}
+      before_install: 
+        - source scripts/osx.sh
+        
+    - name: "OSX: Python3.8-dev"
+      os: osx
+      language: sh
+      env: PYTHON_VERSION=${PYTHON38}
+      before_install: 
+        - source scripts/osx.sh
 
-before_install:
- - pyenv versions
- - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then source .travis-osx; fi
-
+    - name: "Windows: Python3.6"
+      os: windows
+      language: sh
+      env: PYTHON_VERSION=${PYTHON36}
+      before_install: 
+        - source scripts/windows.sh
+        
+    - name: "Windows: Python3.7"
+      os: windows
+      language: sh
+      env: PYTHON_VERSION=${PYTHON37}
+      before_install: 
+        - source scripts/windows.sh
+        
 install:
-  - pip install -U six
-  - pip install --pre -U tox
-
-script:
-  - tox
-
-after_success:
-- if [[ $TOXENV == "py" ]]; then tox -e coverage,codecov; fi
+  - python --version
+  - pip install -rrequirements.txt
+  - pip install -rrequirements_dev.txt
+script: 
+  - python setup.py test
