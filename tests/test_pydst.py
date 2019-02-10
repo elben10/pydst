@@ -57,6 +57,14 @@ def test_list_single_element_subject():
 def test_list_multiple_elements_subject():
     assert isinstance(pydst.Dst().get_subjects(subjects=['02', '05']), DataFrame)
 
+# Checks that top-level subjects is not included
+def test_subjects_not_in_df():
+        assert not ('02' in pydst.Dst().get_subjects(subjects='02')['id'].values)
+
+# Checks that top-level subjects is not included
+def test_subjects_not_in_df_list():
+        assert not ('02' in pydst.Dst().get_subjects(subjects=['02', '05'])['id'].values)
+
 # Check that if get_subjects get int as subjects arg it raises an ValueError
 def test_int_subject():
         with pytest.raises(ValueError):

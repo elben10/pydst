@@ -30,6 +30,7 @@ setup_requirements = [
     "pytest-runner==4.2",
     "pytest-cov==2.5.1",
     "codecov==2.0.15",
+    "pluggy==0.6.0",
 ]
 
 setup(
