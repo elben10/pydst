@@ -44,9 +44,11 @@ matrix:
     - name: "Windows: Python3.6"
       os: windows
       language: sh
-      env: PYTHON_VERSION=${PYTHON36}
+      env: PYTHON_VERSION=${PYTHON36} 
       before_install: 
-        - source scripts/windows.sh
+          - choco install python --version ${PYTHON_VERSION}
+          - export PATH="/c/python${PYTHON_VERSION:0:1}${PYTHON_VERSION:2:1}/Scripts:/c/python${PYTHON_VERSION:0:1}${PYTHON_VERSION:2:1}:${PATH}"
+#         - source scripts/windows.sh
         
     - name: "Windows: Python3.7"
       os: windows
