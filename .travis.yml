@@ -12,7 +12,7 @@ matrix:
       language: sh
       env: PYTHON_VERSION=${PYTHON37}
       before_install: 
-        - bash scripts/windows.sh
+        - source scripts/windows.sh
         
 #     - name: "Windows: Python3.8-dev"
 #       os: windows
