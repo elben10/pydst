@@ -55,9 +55,16 @@ matrix:
       before_install: 
         - source scripts/windows.sh
         
+#     - name: "Windows: Python3.8-dev"
+#       os: windows
+#       language: sh
+#       env: PYTHON_VERSION=${PYTHON38}
+#       before_install: 
+#         - source scripts/windows.sh
+  
 install:
   - python --version
-  - pip install -rrequirements.txt
-  - pip install -rrequirements_dev.txt
+  - python setup.py install
+  
 script: 
   - python setup.py test
