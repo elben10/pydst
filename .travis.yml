@@ -1,34 +1,29 @@
-sudo: false
 language: python
-cache: pip
-python:
-  - 3.5
-  - 3.6
+
 env:
-  TOXENV=py
-
+  global:
+    - PYTHON36="3.6.8"
+    - PYTHON37="3.7.2"
+    - PYTHON38="3.8-dev"
 matrix:
-  fast_finish: true
-  allow_failures:
-  - os:  osx
-  include:
-    - python: 3.6
-      env: TOXENV=docs
-    - python: 3.6
-      env: TOXENV=fix-lint
-    - os: osx
-      language: generic
-
-before_install:
- - pyenv versions
- - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then source .travis-osx; fi
-
+  include: 
+    - name: "Windows: Python3.7"
+      os: windows
+      language: sh
+      env: PYTHON_VERSION=${PYTHON37}
+      before_install: 
+        - source scripts/windows.sh
+        
+#     - name: "Windows: Python3.8-dev"
+#       os: windows
+#       language: sh
+#       env: PYTHON_VERSION=${PYTHON38}
+#       before_install: 
+#         - source scripts/windows.sh
+  
 install:
-  - pip install -U six
-  - pip install --pre -U tox
-
-script:
-  - tox
-
-after_success:
-- if [[ $TOXENV == "py" ]]; then tox -e coverage,codecov; fi
+  - python --version
+  - python setup.py install
+  
+script: 
+  - python setup.py test
