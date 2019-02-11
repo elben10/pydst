@@ -12,8 +12,6 @@ matrix:
       language: sh
       env: PYTHON_VERSION=${PYTHON37}
       before_install: 
-        - choco --version
-        - choco install -y python
         - bash scripts/windows.sh
         
 #     - name: "Windows: Python3.8-dev"
@@ -25,6 +23,9 @@ matrix:
   
 install:
   - python --version
+  - pip --version
+  - pip install -rrequirements.txt
+  - pip install -rrequirements_dev.txt
   - python setup.py install
   
 script: 
