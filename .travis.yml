@@ -13,7 +13,7 @@ matrix:
       env: PYTHON_VERSION=${PYTHON37}
       before_install: 
         - echo 2
-        - choco install python
+        - choco install -y python
         - bash scripts/windows.sh
         
 #     - name: "Windows: Python3.8-dev"
