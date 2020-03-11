@@ -110,3 +110,9 @@ def test_no_inactive_tables_if_false():
 
 def test_inactive_tables_if_true():
     assert pydst.Dst().get_tables(inactive_tables=True).active.all() == False
+
+
+# test that calling pydst.Dst().get_tables with specified subjects only returns 
+# a subset of the full tables list
+def test_get_tables_can_filter():
+    assert pydst.Dst().get_tables(subjects = ['02']).shape != pydst.Dst().get_tables().shape

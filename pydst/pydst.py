@@ -163,6 +163,10 @@ class Dst(object):
             'format': 'JSON',
             'includeInactive': 'true' if inactive_tables else None
             }
+            
+        if not subjects is None: 
+            query_dict['subjects'] = subjects
+
 
         url = utils.construct_url(self.base_url,
                                   self.version,
